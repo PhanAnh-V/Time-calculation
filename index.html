@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weekly Time Tracker</h1>
+        <table id="time-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Hours Spent (Week)</th>
+                    <th>Daily Average</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sleep</td>
+                    <td><input type="number" class="hours-input" data-category="Sleep" min="0"></td>
+                    <td class="daily-average">0.00</td>
+                </tr>
+                <tr>
+                    <td>Part-time job</td>
+                    <td><input type="number" class="hours-input" data-category="Part-time job" min="0"></td>
+                    <td class="daily-average">0.00</td>
+                </tr>
+                <tr>
+                    <td>University/In-out class</td>
+                    <td><input type="number" class="hours-input" data-category="University/In-out class" min="0"></td>
+                    <td class="daily-average">0.00</td>
+                </tr>
+                <tr>
+                    <td>Transportation time</td>
+                    <td><input type="number" class="hours-input" data-category="Transportation time" min="0"></td>
+                    <td class="daily-average">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="summary">
+            <p>Total hours spent: <span id="total-hours">0</span></p>
+            <p>Remaining hours in the week: <span id="remaining-hours">168</span></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
