@@ -13,33 +13,21 @@
             <thead>
                 <tr>
                     <th>Category</th>
-                    <th>Hours Spent (Week)</th>
-                    <th>Daily Average</th>
+                    <th>Hours Spent (Day)</th>
+                    <th>Weekly Total</th>
+                    <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Sleep</td>
-                    <td><input type="number" class="hours-input" data-category="Sleep" min="0"></td>
-                    <td class="daily-average">0.00</td>
-                </tr>
-                <tr>
-                    <td>Part-time job</td>
-                    <td><input type="number" class="hours-input" data-category="Part-time job" min="0"></td>
-                    <td class="daily-average">0.00</td>
-                </tr>
-                <tr>
-                    <td>University/In-out class</td>
-                    <td><input type="number" class="hours-input" data-category="University/In-out class" min="0"></td>
-                    <td class="daily-average">0.00</td>
-                </tr>
-                <tr>
-                    <td>Transportation time</td>
-                    <td><input type="number" class="hours-input" data-category="Transportation time" min="0"></td>
-                    <td class="daily-average">0.00</td>
-                </tr>
+            <tbody id="table-body">
+                <!-- Categories will be dynamically inserted here -->
             </tbody>
         </table>
+
+        <div class="add-category-form">
+            <input type="text" id="new-category-input" placeholder="Enter new category name">
+            <button id="add-category-btn">Add Category</button>
+        </div>
+
         <div class="summary">
             <p>Total hours spent: <span id="total-hours">0</span></p>
             <p>Remaining hours in the week: <span id="remaining-hours">168</span></p>

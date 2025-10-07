@@ -1,49 +1,82 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const tableBody = document.getElementById('table-body');
+    const newCategoryInput = document.getElementById('new-category-input');
+    const addCategoryBtn = document.getElementById('add-category-btn');
     const totalHoursEl = document.getElementById('total-hours');
     const remainingHoursEl = document.getElementById('remaining-hours');
-    const hoursInputs = document.querySelectorAll('.hours-input');
 
     const weekHours = 168;
     let timeData = {};
 
     function loadData() {
-        const savedData = JSON.parse(localStorage.getItem('timeData'));
+        const savedData = JSON.parse(localStorage.getItem('timeDataV2')); // Use a new key for the new data structure
         timeData = savedData || {
-            "Sleep": 0,
-            "Part-time job": 0,
-            "University/In-out class": 0,
-            "Transportation time": 0
+            'Sleep': 8,
+            'Work': 0,
         };
-        updateUI();
+        renderTable();
     }
 
     function saveData() {
-        localStorage.setItem('timeData', JSON.stringify(timeData));
+        localStorage.setItem('timeDataV2', JSON.stringify(timeData));
     }
 
-    function updateUI() {
+    function renderTable() {
+        tableBody.innerHTML = '';
         let totalWeeklyHours = 0;
-        hoursInputs.forEach(input => {
-            const category = input.dataset.category;
-            const weeklyHours = parseFloat(timeData[category]) || 0;
-            input.value = weeklyHours;
 
-            const dailyAverage = (weeklyHours / 7).toFixed(2);
-            input.parentElement.nextElementSibling.textContent = dailyAverage;
-            totalWeeklyHours += weeklyHours;
-        });
+        for (const category in timeData) {
+            const dailyHours = parseFloat(timeData[category]) || 0;
+            const weeklyTotal = dailyHours * 7;
+            totalWeeklyHours += weeklyTotal;
 
-        totalHoursEl.textContent = totalWeeklyHours;
-        remainingHoursEl.textContent = weekHours - totalWeeklyHours;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${category}</td>
+                <td><input type="number" class="hours-input" data-category="${category}" value="${dailyHours}" min="0"></td>
+                <td class="weekly-total">${weeklyTotal.toFixed(2)}</td>
+                <td><button class="delete-btn" data-category="${category}">Delete</button></td>
+            `;
+            tableBody.appendChild(row);
+        }
+        updateSummary(totalWeeklyHours);
     }
 
-    hoursInputs.forEach(input => {
-        input.addEventListener('input', () => {
-            const category = input.dataset.category;
-            timeData[category] = input.value;
+    function updateSummary(totalWeeklyHours) {
+        totalHoursEl.textContent = totalWeeklyHours.toFixed(2);
+        remainingHoursEl.textContent = (weekHours - totalWeeklyHours).toFixed(2);
+    }
+
+    addCategoryBtn.addEventListener('click', () => {
+        const newCategory = newCategoryInput.value.trim();
+        if (newCategory && !timeData.hasOwnProperty(newCategory)) {
+            timeData[newCategory] = 0;
             saveData();
-            updateUI();
-        });
+            renderTable();
+            newCategoryInput.value = '';
+        } else if (timeData.hasOwnProperty(newCategory)){
+            alert('Category already exists!');
+        }
+    });
+
+    tableBody.addEventListener('input', (e) => {
+        if (e.target.classList.contains('hours-input')) {
+            const category = e.target.dataset.category;
+            timeData[category] = e.target.value;
+            saveData();
+            renderTable(); // Re-render to update all calculations
+        }
+    });
+
+    tableBody.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+            const category = e.target.dataset.category;
+            if (confirm(`Are you sure you want to delete the "${category}" category?`)) {
+                delete timeData[category];
+                saveData();
+                renderTable();
+            }
+        }
     });
 
     loadData();
