@@ -9,40 +9,50 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeData = {};
 
     function loadData() {
-        const savedData = JSON.parse(localStorage.getItem('timeDataV2')); // Use a new key for the new data structure
+        const savedData = JSON.parse(localStorage.getItem('timeDataV4'));
         timeData = savedData || {
-            'Sleep': 8,
-            'Work': 0,
+            'Sleep': { h: 8, m: 0 },
+            'Work': { h: 0, m: 0 },
         };
         renderTable();
     }
 
     function saveData() {
-        localStorage.setItem('timeDataV2', JSON.stringify(timeData));
+        localStorage.setItem('timeDataV4', JSON.stringify(timeData));
     }
 
     function renderTable() {
         tableBody.innerHTML = '';
-        let totalWeeklyHours = 0;
-
         for (const category in timeData) {
-            const dailyHours = parseFloat(timeData[category]) || 0;
-            const weeklyTotal = dailyHours * 7;
-            totalWeeklyHours += weeklyTotal;
+            const dailyH = timeData[category].h || 0;
+            const dailyM = timeData[category].m || 0;
+            const dailyHoursDecimal = dailyH + (dailyM / 60);
+            const weeklyTotal = dailyHoursDecimal * 7;
 
             const row = document.createElement('tr');
+            row.dataset.category = category;
             row.innerHTML = `
                 <td>${category}</td>
-                <td><input type="number" class="hours-input" data-category="${category}" value="${dailyHours}" min="0"></td>
+                <td class="time-inputs">
+                    <input type="number" class="hours-input" value="${dailyH}" min="0" max="24">
+                    <span>h</span>
+                    <input type="number" class="minutes-input" value="${dailyM}" min="0" max="59">
+                    <span>m</span>
+                </td>
                 <td class="weekly-total">${weeklyTotal.toFixed(2)}</td>
-                <td><button class="delete-btn" data-category="${category}">Delete</button></td>
+                <td><button class="delete-btn">Delete</button></td>
             `;
             tableBody.appendChild(row);
         }
-        updateSummary(totalWeeklyHours);
+        updateOverallSummary();
     }
 
-    function updateSummary(totalWeeklyHours) {
+    function updateOverallSummary() {
+        let totalWeeklyHours = 0;
+        for (const category in timeData) {
+            const dailyHoursDecimal = (timeData[category].h || 0) + ((timeData[category].m || 0) / 60);
+            totalWeeklyHours += dailyHoursDecimal * 7;
+        }
         totalHoursEl.textContent = totalWeeklyHours.toFixed(2);
         remainingHoursEl.textContent = (weekHours - totalWeeklyHours).toFixed(2);
     }
@@ -50,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addCategoryBtn.addEventListener('click', () => {
         const newCategory = newCategoryInput.value.trim();
         if (newCategory && !timeData.hasOwnProperty(newCategory)) {
-            timeData[newCategory] = 0;
+            timeData[newCategory] = { h: 0, m: 0 };
             saveData();
             renderTable();
             newCategoryInput.value = '';
@@ -60,17 +70,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     tableBody.addEventListener('input', (e) => {
+        const row = e.target.closest('tr');
+        const category = row.dataset.category;
+
         if (e.target.classList.contains('hours-input')) {
-            const category = e.target.dataset.category;
-            timeData[category] = e.target.value;
-            saveData();
-            renderTable(); // Re-render to update all calculations
+            timeData[category].h = parseInt(e.target.value) || 0;
+        } else if (e.target.classList.contains('minutes-input')) {
+            timeData[category].m = parseInt(e.target.value) || 0;
         }
+        
+        // Update only the specific row's weekly total
+        const dailyH = timeData[category].h || 0;
+        const dailyM = timeData[category].m || 0;
+        const dailyHoursDecimal = dailyH + (dailyM / 60);
+        const weeklyTotal = dailyHoursDecimal * 7;
+        row.querySelector('.weekly-total').textContent = weeklyTotal.toFixed(2);
+
+        updateOverallSummary();
+        saveData();
     });
 
     tableBody.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-btn')) {
-            const category = e.target.dataset.category;
+            const row = e.target.closest('tr');
+            const category = row.dataset.category;
             if (confirm(`Are you sure you want to delete the "${category}" category?`)) {
                 delete timeData[category];
                 saveData();

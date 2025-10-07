@@ -122,3 +122,40 @@ th {
     cursor: pointer;
     padding: 5px 10px;
 }
+
+.summary {
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.summary p {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+#total-hours {
+    color: #dc3545; /* Red for spent hours */
+}
+
+#remaining-hours {
+    color: #28a745; /* Green for remaining hours */
+}
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+}
+
+.hours-input, .minutes-input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 3px;
+}
