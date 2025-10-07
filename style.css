@@ -14,7 +14,7 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: 600px; /* Increased width for more space */
 }
 
 h1 {
@@ -61,16 +61,36 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    table-layout: fixed; /* Use fixed layout for predictable column widths */
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
+    vertical-align: middle; /* Vertically center content */
+    word-break: break-word; /* Allow long words to wrap */
+}
+
+/* Set column widths */
+th:nth-child(1) { width: 40%; } /* Category */
+th:nth-child(2) { width: 25%; } /* Daily Hours */
+th:nth-child(3) { width: 15%; } /* Days/Week */
+th:nth-child(4) { width: 15%; } /* Weekly Total */
+th:nth-child(5) { width: 15%; } /* Action */
+
+td:nth-child(1) {
     text-align: left;
+}
+
+td:nth-child(2),
+td:nth-child(3),
+td:nth-child(4) {
+    text-align: center;
 }
 
 th {
     background-color: #f2f2f2;
+    font-weight: bold; /* Make header text bolder */
 }
 
 .daily-average {
@@ -121,6 +141,7 @@ th {
     border-radius: 3px;
     cursor: pointer;
     padding: 5px 10px;
+    white-space: nowrap; /* Prevent 'Delete' from wrapping */
 }
 
 .summary {
@@ -147,15 +168,105 @@ th {
     color: #28a745; /* Green for remaining hours */
 }
 
+#reset-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 12px;
+    cursor: pointer;
+    float: right;
+    margin-top: 10px;
+}
+
 .time-inputs {
     display: flex;
     align-items: center;
+    justify-content: center; /* Center the inputs within the cell */
 }
 
 .hours-input, .minutes-input {
-    width: 60px;
+    width: 45px; /* Reduced width */
     text-align: center;
     border: 1px solid #ccc;
     padding: 5px;
     border-radius: 3px;
+}
+
+/* Animation for new row */
+.flash-green {
+    animation: flash-green 1s ease-out;
+}
+
+@keyframes flash-green {
+    0% {
+        background-color: #c8e6c9; /* Light green */
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+/* Animation for deleting a row */
+.fade-out {
+    animation: fade-out 0.15s ease-out forwards;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+}
+
+/* Custom Modal Styles */
+#modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#confirm-modal {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 320px;
+}
+
+#modal-text {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+#modal-buttons button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 0 10px;
+}
+
+#modal-cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+#modal-confirm-btn {
+    background-color: #dc3545;
+    color: white;
 }
