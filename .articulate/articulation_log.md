@@ -21,3 +21,13 @@ This file logs examples of rephrased instructions to help with clarity and learn
 
 **Rephrased AI Suggestion:**
 > How can I serve my static web project on a local development server, so it's accessible via a `http://localhost` URL?
+
+---
+
+### Example 3
+
+**Original User Instruction:**
+> Like, fuck me man, but can you make it so that I could just put the hours numbers in the total right? Yeah, I should have kept up very very simple in the first place, but I just fucked up.
+
+**Rephrased AI Suggestion:**
+> I want to pivot the app's core logic. The current system of calculating a weekly total from daily averages is too rigid for my inconsistent schedule. Please simplify the application by removing the 'Daily Hours' and 'Days/Week' columns and allowing me to directly input the total weekly hours for each category.

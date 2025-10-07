@@ -71,12 +71,19 @@ th, td {
     word-break: break-word; /* Allow long words to wrap */
 }
 
-/* Set column widths */
-th:nth-child(1) { width: 40%; } /* Category */
-th:nth-child(2) { width: 25%; } /* Daily Hours */
-th:nth-child(3) { width: 15%; } /* Days/Week */
-th:nth-child(4) { width: 15%; } /* Weekly Total */
-th:nth-child(5) { width: 15%; } /* Action */
+/* Set column widths for the new 3-column layout */
+th:nth-child(1) { width: 60%; } /* Category */
+th:nth-child(2) { width: 25%; } /* Weekly Total */
+th:nth-child(3) { width: 15%; } /* Action */
+
+td:nth-child(1) {
+    text-align: left;
+}
+
+td:nth-child(2),
+td:nth-child(3) {
+    text-align: center;
+}
 
 td:nth-child(1) {
     text-align: left;
@@ -135,13 +142,18 @@ th {
 }
 
 .delete-btn {
-    background-color: #dc3545;
-    color: #fff;
+    background-color: transparent;
     border: none;
-    border-radius: 3px;
     cursor: pointer;
-    padding: 5px 10px;
-    white-space: nowrap; /* Prevent 'Delete' from wrapping */
+    padding: 5px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn:hover {
+    background-color: #f0f0f0;
 }
 
 .summary {
